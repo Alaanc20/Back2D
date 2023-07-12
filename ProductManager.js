@@ -21,10 +21,9 @@ class ProductManager {
     constructor(path) {
         this.#products = new Array();
         this.#productDirPath = "./files";
-        this.#productFilePath = this.#productDirPath + "/" + path;
+        this.#productFilePath = this.#productDirPath + (path ? `/${path}` : '') + "/products.json";
         this.#fileSystem = require("fs");
     }
-
     addProduct = async (title, description, price, thumbnail, code, stock) => {
         let newProduct = new Product(title, description, price, thumbnail, code, stock);
         console.log("Crear Producto: producto a registrar:");
