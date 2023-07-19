@@ -1,4 +1,5 @@
-const ProductManager = require("./ProductManager.js");
+import { ProductManager } from './src/ProductManager.js';
+
 let productManager = new ProductManager();
 console.log(productManager);
 
@@ -11,7 +12,7 @@ let persistirProduct = async () => {
     console.log(`Productos encontrados en Product Manager: ${products.length}`);
     console.log(products);
 
-    let foundProduct = await productManager.getProductById('abc123');
+    let foundProduct = await productManager.getProductById(parseInt('abc123')); 
     console.log("Producto encontrado por ID:");
     console.log(foundProduct);
 

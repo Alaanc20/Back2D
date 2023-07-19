@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 class Product {
     static lastId = 0;
 
@@ -12,19 +14,20 @@ class Product {
     }
 }
 
-class ProductManager {
+export class ProductManager {
     #products;
     #productDirPath;
     #productFilePath;
     #fileSystem;
 
     constructor(path) {
-        this.#products = new Array();
+        this.#products = [];
         this.#productDirPath = "./files";
         this.#productFilePath = this.#productDirPath + (path ? `/${path}` : '') + "/products.json";
-        this.#fileSystem = require("fs");
+        this.#fileSystem = fs;
     }
-    addProduct = async (title, description, price, thumbnail, code, stock) => {
+
+    async addProduct(title, description, price, thumbnail, code, stock) {
         let newProduct = new Product(title, description, price, thumbnail, code, stock);
         console.log("Crear Producto: producto a registrar:");
         console.log(newProduct);
@@ -54,7 +57,7 @@ class ProductManager {
         }
     }
 
-    getProducts = async () => {
+    async getProducts() {
         try {
             await this.#fileSystem.promises.mkdir(this.#productDirPath, { recursive: true });
 
@@ -75,7 +78,7 @@ class ProductManager {
         }
     }
 
-    getProductById = async (id) => {
+    async getProductById(id) {
         try {
             await this.#fileSystem.promises.mkdir(this.#productDirPath, { recursive: true });
 
@@ -98,7 +101,7 @@ class ProductManager {
         }
     }
 
-    updateProduct = async (id, updatedFields) => {
+    async updateProduct(id, updatedFields) {
         try {
             await this.#fileSystem.promises.mkdir(this.#productDirPath, { recursive: true });
 
@@ -131,7 +134,7 @@ class ProductManager {
         }
     }
 
-    deleteProduct = async (id) => {
+    async deleteProduct(id) {
         try {
             await this.#fileSystem.promises.mkdir(this.#productDirPath, { recursive: true });
 
@@ -165,4 +168,4 @@ class ProductManager {
     }
 }
 
-module.exports = ProductManager;
+export { Product };
