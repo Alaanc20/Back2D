@@ -1,18 +1,20 @@
 {
   "name": "back3d",
   "version": "1.0.0",
-  "description": "Desafio server api",
-  "main": "src/app.js",
+  "description": "PrimerPreEntregaBack",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.9",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
   },
-  "keywords": []
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
