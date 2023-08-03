@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-const cartsFilePath = './src/files/carrito.json';
+const cartsFilePath = './files/carrito.json';
 
-const leerDatosDelArchivo = async () => {
+const readFilesCart = async () => {
     try {
         const data = await fs.promises.readFile(cartsFilePath, 'utf8');
         return JSON.parse(data);
@@ -12,62 +12,57 @@ const leerDatosDelArchivo = async () => {
     }
 };
 
-const escribirDatosEnArchivo = async (data) => {
+const writeFilesCart = async (data) => {
     try {
         await fs.promises.writeFile(cartsFilePath, JSON.stringify(data, null, 2));
     } catch (error) {
-        throw new Error('Error al escribir en el archivo');
+        throw new Error('Error writing cart');
     }
 };
 
-const cartsController = {
-    crearCarrito: async (req, res) => {
-        const nuevoCarrito = {
+const cartController = {
+    newCart: async (req, res) => {
+        const nuevocart = {
             id: uuidv4(),
             products: [],
         };
-        let carritos = await leerDatosDelArchivo();
-
-        if (!Array.isArray(carritos)) {
-            carritos = [];
-        }
-
-        carritos.push(nuevoCarrito);
-        await escribirDatosEnArchivo(carritos);
-        res.status(201).json(nuevoCarrito);
+        const carts = await readFilesCart();
+        carts.push(nuevocart);
+        await writeFilesCart(carts);
+        res.status(201).json(nuevocart);
     },
 
-    obtenerProductosDelCarrito: async (req, res) => {
-        const carritos = await leerDatosDelArchivo();
-        const carrito = carritos.find((item) => item.id === req.params.cid);
-        if (carrito) {
-            res.json(carrito.products);
+    getCartProducts: async (req, res) => {
+        const carts = await readFilesCart();
+        const cart = carts.find((item) => item.id === req.params.cid);
+        if (cart) {
+            res.json(cart.products);
         } else {
-            res.status(404).json({ mensaje: 'Carrito no encontrado' });
+            res.status(404).json({ message: 'cart not found' });
         }
     },
 
-    agregarProductoAlCarrito: async (req, res) => {
-        const cantidad = req.body.quantity || 1;
-        const carritos = await leerDatosDelArchivo();
-        const indiceCarrito = carritos.findIndex((item) => item.id === req.params.cid);
-        if (indiceCarrito !== -1) {
-            const carrito = carritos[indiceCarrito];
-            const productoAAgregar = { id: req.params.pid, cantidad };
-            const indiceProductoExistente = carrito.products.findIndex((item) => item.id === req.params.pid);
+    addNewProduct: async (req, res) => {
+        const quantity = req.body.quantity || 1;
+        const carts = await readFilesCart();
+        const indicecart = carts.findIndex((item) => item.id === req.params.cid);
+        if (indicecart !== -1) {
+            const cart = carts[indicecart];
+            const productToAdd = { id: req.params.pid, quantity };
+            const indexFoundProduct = cart.products.findIndex((item) => item.id === req.params.pid);
 
-            if (indiceProductoExistente !== -1) {
-                carrito.products[indiceProductoExistente].cantidad += cantidad;
+            if (indexFoundProduct !== -1) {
+                cart.products[indexFoundProduct].quantity += quantity;
             } else {
-                carrito.products.push(productoAAgregar);
+                cart.products.push(productToAdd);
             }
 
-            await escribirDatosEnArchivo(carritos);
-            res.json(carrito.products);
+            await writeFilesCart(carts);
+            res.json(cart.products);
         } else {
-            res.status(404).json({ mensaje: 'Carrito no encontrado' });
+            res.status(404).json({ message: 'cart not found' });
         }
     },
 };
 
-export default cartsController;
+export default cartController;
