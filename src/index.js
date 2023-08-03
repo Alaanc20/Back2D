@@ -28,7 +28,7 @@ const handlebars = expressHandlebars.create({
 });
 
 app.engine('hbs', handlebars.engine);
-app.set('views', __dirname + '/views'); // Utiliza __dirname para obtener la ruta correcta
+app.set('views', __dirname + '/views'); 
 app.set('view engine', 'hbs');
 
 app.use('/api/products', productsRouter);
